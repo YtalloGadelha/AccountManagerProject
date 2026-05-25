@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class LoginViewController: DefaultViewController {
     
@@ -15,30 +16,21 @@ class LoginViewController: DefaultViewController {
     @IBOutlet weak var userTextField: UITextField!
     @IBOutlet weak var passWordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
+    var context: NSManagedObjectContext!
     
     var viewModel: LoginViewModel = LoginViewModel()
     
-    @IBAction func loginButton(_ sender: Any) {
-        
-        //Recuperar dados digitados
-        if let email = self.userTextField.text {
-            if let password = self.passWordTextField.text {
-                
-                self.viewModel.Login(email: email, password: password)
-            }
-        }
-    }
-    
     override func viewDidLoad() {
-        super.viewDidLoad()
-        overrideUserInterfaceStyle = .light
-
-        self.loginButton.clipsToBounds = true
-        self.loginButton.layer.cornerRadius = 12.0
-        self.loginButton.layer.borderColor = UIColor.lightGray.cgColor
-        self.loginButton.layer.borderWidth = 0.5
+        super.viewDidLoad()       
         
+        overrideUserInterfaceStyle = .light
+        configLayout()
         self.viewModel.delegate = self
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        context = appDelegate.persistentContainer.viewContext
+        //self.viewModel.silentLogin()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,15 +38,55 @@ class LoginViewController: DefaultViewController {
         self.viewModel.silentLogin()
     }
     
+    @IBAction func loginButton(_ sender: Any) {
+        
+        //Recuperar dados digitados
+        if let email = self.userTextField.text {
+            if let password = self.passWordTextField.text {                
+                self.viewModel.Login(email: email, password: password)
+            }
+        }
+    }
+    
+    func configLayout() {
+        self.loginButton.clipsToBounds = true
+        self.loginButton.layer.cornerRadius = 12.0
+        self.loginButton.layer.borderColor = UIColor.lightGray.cgColor
+        self.loginButton.layer.borderWidth = 0.5
+        
+        self.userTextField.clipsToBounds = true
+        self.userTextField.layer.cornerRadius = 12.0
+        self.userTextField.layer.borderWidth = 0.2
+        
+        self.passWordTextField.clipsToBounds = true
+        self.passWordTextField.layer.cornerRadius = 12.0
+        self.passWordTextField.layer.borderWidth = 0.2
+    }
+    
 }
 
 extension LoginViewController: LoginViewModelDelegate{
-    func didFinishWithSuccess() {
+    func didFinishVerificationLoggedUser() {
+        self.performSegue(withIdentifier: "loggedUser", sender: nil)
+    }
+    
+    func didFinishWithSuccess(email: String, password: String) {
+        self.viewModel.saveUserCoreData(email: email, password: password)
         self.performSegue(withIdentifier: "loginSegue", sender: nil)
     }
     
     func didFail(message: String?) {
         self.showAlert(message: message ?? "")
-    }   
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "loggedUser"{
+            
+            let viewDestino = segue.destination as! MainViewController
+            self.navigationController?.present(viewDestino, animated: true, completion: nil)
+            
+        }
+    }
     
 }

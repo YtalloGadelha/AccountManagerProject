@@ -30,6 +30,8 @@ class MainViewModel {
     }
     
     func logout() {
+        
+        self.authBusinessModel.fetchCoreDataLoggedUser()
         self.authBusinessModel.logout { [weak self] result in
             switch result{
             

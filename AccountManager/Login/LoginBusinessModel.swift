@@ -7,10 +7,24 @@
 
 import Foundation
 import FirebaseAuth
+import CoreData
 
 fileprivate var globalUser: User? = nil
+fileprivate let appDelegate = UIApplication.shared.delegate as! AppDelegate
+fileprivate var context: NSManagedObjectContext!
+fileprivate var loggedUser: [NSManagedObject] = []
 
 class LoginBusinessModel: LoginProtocol {
+    
+    static func isLogged() -> Bool{
+        
+        if loggedUser.isEmpty {
+            return false
+        }
+        
+        return true
+        
+    }
     
     func login(credentials: LoginCredentials, completion: @escaping(Result<Void, AccountManagerError>) -> Void) {
         //Autenticar usuário no Firebase
@@ -40,21 +54,64 @@ class LoginBusinessModel: LoginProtocol {
         
         let firebaseAuth = Auth.auth()
         
+        context = appDelegate.persistentContainer.viewContext
+        
         do {
             try firebaseAuth.signOut()
             globalUser = nil
+            
+            if !loggedUser.isEmpty, let usuario = loggedUser.first {
+                context.delete(usuario)
+                loggedUser = []
+            }
+            
+            do{
+                try context.save()
+                
+            }catch let erro as NSError{
+                print("Erro ao remover dado no coredata: \(erro)")
+                
+            }
+            
             completion(.success(()))
         } catch {
             completion(.failure(.signout))
         }
     }
     
-    static func isLogged() -> Bool{
+    func fetchCoreDataLoggedUser(){
         
-        guard let _ = globalUser else {
-            return false
+        context = appDelegate.persistentContainer.viewContext
+        
+        let requisicao = NSFetchRequest<NSFetchRequestResult>(entityName: "UserCoreData")
+        
+        do {
+            
+            let recoveredUser = try context.fetch(requisicao)
+            loggedUser = recoveredUser as! [NSManagedObject]
+            
+        } catch let erro {
+            print("Erro ao recuperar do usuario: \(erro.localizedDescription)")
         }
         
-        return true
     }
+    
+    func saveUserCoreData(email: String, password: String) {
+        
+        //cria objeto no coredata
+        let userCoreData = NSEntityDescription.insertNewObject(forEntityName: "UserCoreData", into: context)
+        
+        //configura, no core data, o usuário logado
+        userCoreData.setValue(email, forKey: "email")
+        userCoreData.setValue(password, forKey: "password")
+        
+        do {
+            try context.save()
+            print("Sucesso ao salvar usuário logado!")
+        } catch let erro {
+            print("Erro ao salvar usuário logado: \(erro.localizedDescription)")
+        }
+        
+    }
+    
 }

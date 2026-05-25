@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import CoreData
 
 protocol LoginViewModelDelegate: AnyObject {
-    func didFinishWithSuccess()
+    func didFinishWithSuccess(email: String, password: String)
     func didFail(message: String?)
+    func didFinishVerificationLoggedUser()
 }
 
 class LoginViewModel {
@@ -26,7 +28,7 @@ class LoginViewModel {
             switch result {
                 
             case .success(_):
-                self?.delegate?.didFinishWithSuccess()
+                self?.delegate?.didFinishWithSuccess(email: email, password: password)
             case .failure(let error):
                 self?.delegate?.didFail(message: error.getMessage())
             }
@@ -34,8 +36,17 @@ class LoginViewModel {
     }
     
     func silentLogin() {
+        
+        self.businessModel.fetchCoreDataLoggedUser()
+        
         if LoginBusinessModel.isLogged() {
-            self.delegate?.didFinishWithSuccess()
+            self.delegate?.didFinishVerificationLoggedUser()
         }
+        
     }
+    
+    func saveUserCoreData(email: String, password: String){
+        self.businessModel.saveUserCoreData(email: email, password: password)
+    }
+    
 }

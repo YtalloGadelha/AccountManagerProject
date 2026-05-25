@@ -89,8 +89,6 @@ extension MainViewController:  UITableViewDelegate, UITableViewDataSource {
                 cell.setupCell(viewModel: myTableViewCellViewModel)
             }
             
-            cell.accessoryType = .disclosureIndicator
-            
             return cell
         }
         

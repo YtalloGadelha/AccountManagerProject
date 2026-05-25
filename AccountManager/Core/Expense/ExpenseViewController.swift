@@ -20,11 +20,7 @@ class ExpenseViewController: DefaultViewController {
     
     var expense: ExpenseModel?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        overrideUserInterfaceStyle = .light
-        
+    func configLayout() {
         self.cancelButton.clipsToBounds = true
         self.cancelButton.layer.cornerRadius = 12.0
         self.cancelButton.layer.borderColor = UIColor.lightGray.cgColor
@@ -34,6 +30,24 @@ class ExpenseViewController: DefaultViewController {
         self.saveButton.layer.cornerRadius = 12.0
         self.saveButton.layer.borderColor = UIColor.lightGray.cgColor
         self.saveButton.layer.borderWidth = 0.5
+        
+        self.valueTextField.clipsToBounds = true
+        self.valueTextField.layer.cornerRadius = 12.0
+        self.valueTextField.layer.borderWidth = 0.2
+        
+        self.dateTextField.clipsToBounds = true
+        self.dateTextField.layer.cornerRadius = 12.0
+        self.dateTextField.layer.borderWidth = 0.2
+        
+        self.descriptionTextField.clipsToBounds = true
+        self.descriptionTextField.layer.cornerRadius = 12.0
+        self.descriptionTextField.layer.borderWidth = 0.2
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        overrideUserInterfaceStyle = .light
+        configLayout()
         
     }
     

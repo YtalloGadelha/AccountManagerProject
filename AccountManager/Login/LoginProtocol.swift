@@ -10,6 +10,8 @@ import Foundation
 protocol LoginProtocol{    
     func login(credentials: LoginCredentials, completion: @escaping(Result<Void, AccountManagerError>) -> Void)
     func logout(completion: @escaping(Result<Void, AccountManagerError>) -> Void)
+    func fetchCoreDataLoggedUser()
+    func saveUserCoreData(email: String, password: String)
 }
 
 struct LoginCredentials {
