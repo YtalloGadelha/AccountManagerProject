@@ -23,7 +23,7 @@ class MyTableViewCell: UITableViewCell {
     
         self.valueLabel.text = "Valor: \(viewModel.value)"
         self.dateLabel.text = "Data: \(dateFormatter.string(from: viewModel.date ?? Date()))"
-        self.descriptionLabel.text = "Descrição: \(viewModel.description)."
+        self.descriptionLabel.text = "Descrição: \(viewModel.description)"
         
         if(viewModel.paid){
             self.paidLabel.text = "Pago: Sim."

@@ -16,7 +16,7 @@ class ExpenseViewController: DefaultViewController {
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var paidSwitch: UISwitch!
     
-    var viewModel: MainViewModel = MainViewModel()
+    var viewModel: ExpenseViewModel = ExpenseViewModel()
     
     var expense: ExpenseModel?
     

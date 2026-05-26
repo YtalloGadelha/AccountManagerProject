@@ -29,7 +29,7 @@ class MyTableViewCellViewModel {
     }
     
     init(expenseModel: ExpenseModel) {
-        self.model = expenseModel
-        
+        self.model = expenseModel        
     }
+    
 }

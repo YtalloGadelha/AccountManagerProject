@@ -16,10 +16,7 @@ class MainViewController: DefaultViewController{
     
     var viewModel: MainViewModel = MainViewModel()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        overrideUserInterfaceStyle = .light
-        
+    func configLayout() {
         self.addExpenseButton.clipsToBounds = true
         self.addExpenseButton.layer.cornerRadius = 12.0
         self.addExpenseButton.layer.borderColor = UIColor.lightGray.cgColor
@@ -29,6 +26,12 @@ class MainViewController: DefaultViewController{
         self.logoutButton.layer.cornerRadius = 12.0
         self.logoutButton.layer.borderColor = UIColor.lightGray.cgColor
         self.logoutButton.layer.borderWidth = 0.5
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        overrideUserInterfaceStyle = .light
+        configLayout()
         
         self.viewModel.delegate = self
         self.tableView.delegate = self
@@ -47,9 +50,9 @@ class MainViewController: DefaultViewController{
         
         let story = UIStoryboard.init(name: "Expense", bundle: nil)
         if let vc = story.instantiateInitialViewController(){
-            
             self.present(vc, animated: true, completion: nil)
         }
+        
     }
     
     @IBAction func logoutButton(_ sender: Any) {
@@ -59,9 +62,10 @@ class MainViewController: DefaultViewController{
 }
 
 extension MainViewController: MainViewModelDelegate{
+    
     func didSignout() {
-        self.dismiss(animated: true, completion: nil)
         self.hideActivity()
+        self.dismiss(animated: true, completion: nil)
     }
     
     func didFinishWithSuccess() {
@@ -72,10 +76,12 @@ extension MainViewController: MainViewModelDelegate{
     func didFail(message: String?) {
         self.showAlert(message: message ?? "")
     }
+    
 }
 
 //MARK:- Extension TableView
 extension MainViewController:  UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.viewModel.tableViewNumberOfLines
     }
@@ -85,14 +91,15 @@ extension MainViewController:  UITableViewDelegate, UITableViewDataSource {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "myCell") as? MyTableViewCell {
             
             if let myTableViewCellViewModel = self.viewModel.getTableViewCellViewModel(from: indexPath){
-                
                 cell.setupCell(viewModel: myTableViewCellViewModel)
             }
             
             return cell
+            
         }
         
         return UITableViewCell()
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -100,6 +107,7 @@ extension MainViewController:  UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         tableView.deselectRow(at: indexPath, animated: false)
         
         if let selectedData = self.viewModel.getData(from: indexPath){
@@ -109,8 +117,11 @@ extension MainViewController:  UITableViewDelegate, UITableViewDataSource {
                 
                 vc.expense = selectedData
                 self.present(vc, animated: true, completion: nil)
+                
             }
+            
         }
+        
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -121,8 +132,10 @@ extension MainViewController:  UITableViewDelegate, UITableViewDataSource {
                 
                 self.viewModel.delete(object: selectedData)
                 self.viewModel.list()
+                
             }
         }
+        
     }
     
 }

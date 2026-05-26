@@ -40,7 +40,6 @@ class DefaultViewController: UIViewController {
     }
     
     func setupNavigation(_ title: String? = nil) {
-        
         self.navigationItem.title = title ?? ""
         self.navigationItem.titleView?.tintColor = .white
     }
@@ -78,7 +77,10 @@ class DefaultViewController: UIViewController {
     func showAlert(message: String) {
         let alert = UIAlertController(title: "", message: message, preferredStyle: UIAlertController.Style.alert)
         
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        alert.preferredAction = action
+        
         self.present(alert, animated: true, completion: nil)
     }
 }

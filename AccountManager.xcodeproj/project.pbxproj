@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -236,8 +236,6 @@
 			children = (
 				53BD4A0226B5EBA400DD372E /* MainViewModel.swift */,
 				53B9710526B4817900B8C6AE /* MainViewController.swift */,
-				53BD4A0C26B6E10A00DD372E /* MyTableViewCell.swift */,
-				53BD4A0E26B6E13000DD372E /* MyTableViewCellViewModel.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -255,6 +253,7 @@
 		53BD4A0926B6E06C00DD372E /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				FEEAAC012FC6647C00810297 /* Cell */,
 				53BD4A0A26B6E07700DD372E /* DefaultViewController.swift */,
 			);
 			path = Util;
@@ -281,6 +280,15 @@
 				006666F77FCDD426D3C40B51 /* Pods-AccountManagerTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		FEEAAC012FC6647C00810297 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				53BD4A0C26B6E10A00DD372E /* MyTableViewCell.swift */,
+				53BD4A0E26B6E13000DD372E /* MyTableViewCellViewModel.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -447,9 +455,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AccountManager-AccountManagerUITests/Pods-AccountManager-AccountManagerUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AccountManager-AccountManagerUITests/Pods-AccountManager-AccountManagerUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -464,9 +476,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AccountManager/Pods-AccountManager-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AccountManager/Pods-AccountManager-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

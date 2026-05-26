@@ -40,6 +40,7 @@ class MainViewModel {
             case .failure(let error):
                 self?.delegate?.didFail(message: error.getMessage())
             }
+            
         }
     }
     
@@ -52,6 +53,7 @@ class MainViewModel {
         let model = data[indexPath.row]
         
         return MyTableViewCellViewModel(expenseModel: model)
+        
     }
     
     func getData(from indexPath: IndexPath) -> ExpenseModel? {
@@ -59,6 +61,7 @@ class MainViewModel {
         let model = data[indexPath.row]
         
         return ExpenseModel(documentID: model.documentID, value: model.value, description: model.description, date: model.date, paid: model.paid)
+        
     }
     
     func list() {
@@ -71,20 +74,7 @@ class MainViewModel {
                 self?.delegate?.didFinishWithSuccess()
             case .failure(let error):
                 self?.delegate?.didFail(message: error.getMessage())
-            }
-        }
-    }
-    
-    func create(object: ExpenseModel) {
-        
-        self.expenseBusinessModel.create(object: object) { [weak self] result in
-            
-            switch result{
-            
-            case .success():
-                self?.delegate?.didFinishWithSuccess()
-            case .failure(let error):
-                self?.delegate?.didFail(message: error.getMessage())
+                
             }
         }
     }
@@ -103,17 +93,4 @@ class MainViewModel {
         }
     }
     
-    func update(object: ExpenseModel) {
-        
-        self.expenseBusinessModel.update(object: object) { [weak self] result in
-            
-            switch result{
-            
-            case .success():
-                self?.delegate?.didFinishWithSuccess()
-            case .failure(let error):
-                self?.delegate?.didFail(message: error.getMessage())
-            }
-        }
-    }
 }

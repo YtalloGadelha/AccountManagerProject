@@ -14,7 +14,7 @@ class ExpenseBusinessModel: ExpenseRepositoryProtocol {
         let db = Firestore.firestore()
         db.collection("expenses").getDocuments() { (querySnapshot, err) in
             if let err = err {
-                print("Erro ao buscas as despesas: \(err)")
+                print("Erro ao buscar as despesas: \(err)")
                 completion(.failure(.badRequest))
             } else {
                 
@@ -26,11 +26,14 @@ class ExpenseBusinessModel: ExpenseRepositoryProtocol {
                     let description = snapshot.data()["description"] as? String
                     
                     return ExpenseModel(documentID: snapshot.documentID, value: value ?? 0, description: description ?? "", date: date ?? Date(), paid: paid ?? false)
+                    
                 }) ?? []
                 
                 completion(.success(objects as? [ExpenseModel] ?? []))
             }
-        }        
+            
+        }
+        
     }
     
     func delete(object: ExpenseModel, completion: @escaping (Result<Void, AccountManagerError>) -> Void) {
