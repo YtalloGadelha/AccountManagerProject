@@ -16,7 +16,6 @@ class LoginViewController: DefaultViewController {
     @IBOutlet weak var userTextField: UITextField!
     @IBOutlet weak var passWordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
-    var context: NSManagedObjectContext!
     
     var viewModel: LoginViewModel = LoginViewModel()
     
@@ -26,10 +25,6 @@ class LoginViewController: DefaultViewController {
         overrideUserInterfaceStyle = .light
         configLayout()
         self.viewModel.delegate = self
-        
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        context = appDelegate.persistentContainer.viewContext
-        //self.viewModel.silentLogin()
         
     }
     
@@ -66,6 +61,7 @@ class LoginViewController: DefaultViewController {
 }
 
 extension LoginViewController: LoginViewModelDelegate{
+    
     func didFinishVerificationLoggedUser() {
         self.performSegue(withIdentifier: "loggedUser", sender: nil)
     }

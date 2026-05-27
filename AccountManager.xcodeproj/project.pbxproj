@@ -216,6 +216,7 @@
 		53BD49F926B5DF6600DD372E /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				53B970FF26B4770000B8C6AE /* ExpenseModel.swift */,
 				53BD4A0426B5F34200DD372E /* ExpenseRepositoryProtocol.swift */,
 				53BD4A0626B5F50000DD372E /* ExpenseBusinessModel.swift */,
 			);
@@ -243,9 +244,8 @@
 		53BD4A0826B5F55200DD372E /* Expense */ = {
 			isa = PBXGroup;
 			children = (
-				53B970FF26B4770000B8C6AE /* ExpenseModel.swift */,
-				53B970FA26B476BE00B8C6AE /* ExpenseViewController.swift */,
 				53BD4A1026B6EACE00DD372E /* ExpenseViewModel.swift */,
+				53B970FA26B476BE00B8C6AE /* ExpenseViewController.swift */,
 			);
 			path = Expense;
 			sourceTree = "<group>";

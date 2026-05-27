@@ -83,7 +83,7 @@ class ExpenseViewController: DefaultViewController {
         let objDateFormate = dateFormatter.date(from: self.dateTextField.text ?? "")
         
         let objValue = ((self.valueTextField.text ?? "") as NSString).doubleValue
-        let objDate =  objDateFormate ?? Date()
+        let objDate = objDateFormate ?? Date()
         var objDescription = ""
         let objPaid = self.paidSwitch.isOn
         
@@ -102,7 +102,8 @@ class ExpenseViewController: DefaultViewController {
             
             let expense = ExpenseModel(documentID: self.expense?.documentID ?? "", value: objValue, description: objDescription, date: objDate, paid: objPaid)
             self.viewModel.update(object: expense)
-        }   
+            
+        }
         
         self.dismiss(animated: true, completion: nil)
     }
