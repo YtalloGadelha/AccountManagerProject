@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 
 class ExpenseBusinessModel: ExpenseRepositoryProtocol {
-    func list(completion: @escaping (Result<[ExpenseModel], AccountManagerError>) -> Void) {
+    func list(completion: @escaping (Result<[AccountModel], AccountManagerError>) -> Void) {
         
         let db = Firestore.firestore()
         db.collection("expenses").getDocuments() { (querySnapshot, err) in
@@ -24,19 +24,21 @@ class ExpenseBusinessModel: ExpenseRepositoryProtocol {
                     let date = (snapshot.data()["date"] as? Timestamp)?.dateValue()
                     let paid = snapshot.data()["paid"] as? Bool
                     let description = snapshot.data()["description"] as? String
+                    let isExpense = snapshot.data()["isExpense"] as? Bool
+                    let isIncome = snapshot.data()["isIncome"] as? Bool
                     
-                    return ExpenseModel(documentID: snapshot.documentID, value: value ?? 0, description: description ?? "", date: date ?? Date(), paid: paid ?? false)
+                    return AccountModel(documentID: snapshot.documentID, value: value ?? 0, description: description ?? "", date: date ?? Date(), paid: paid ?? false, isExpense: isExpense ?? true, isIncome: isIncome ?? false)
                     
                 }) ?? []
                 
-                completion(.success(objects as? [ExpenseModel] ?? []))
+                completion(.success(objects as? [AccountModel] ?? []))
             }
             
         }
         
     }
     
-    func delete(object: ExpenseModel, completion: @escaping (Result<Void, AccountManagerError>) -> Void) {
+    func delete(object: AccountModel, completion: @escaping (Result<Void, AccountManagerError>) -> Void) {
         
         let db = Firestore.firestore()
         db.collection("expenses").document(object.documentID).delete() { err in
@@ -51,7 +53,7 @@ class ExpenseBusinessModel: ExpenseRepositoryProtocol {
         
     }
     
-    func update(object: ExpenseModel, completion: @escaping (Result<Void, AccountManagerError>) -> Void) {
+    func update(object: AccountModel, completion: @escaping (Result<Void, AccountManagerError>) -> Void) {
         
         let db = Firestore.firestore()
         db.collection("expenses").document(object.documentID).updateData( [
@@ -59,7 +61,9 @@ class ExpenseBusinessModel: ExpenseRepositoryProtocol {
             "value": object.value,
             "date": object.date,
             "paid": object.paid,
-            "description": object.description
+            "description": object.description,
+            "isExpense": object.isExpense,
+            "isIncome": object.isIncome
             
         ]) { err in
             if let err = err {
@@ -73,7 +77,7 @@ class ExpenseBusinessModel: ExpenseRepositoryProtocol {
         
     }
     
-    func create(object: ExpenseModel, completion: @escaping (Result<Void, AccountManagerError>) -> Void) {
+    func create(object: AccountModel, completion: @escaping (Result<Void, AccountManagerError>) -> Void) {
         
         let db = Firestore.firestore()
         
@@ -82,7 +86,9 @@ class ExpenseBusinessModel: ExpenseRepositoryProtocol {
             "value": object.value,
             "date": object.date,
             "paid": object.paid,
-            "description": object.description
+            "description": object.description,
+            "isExpense": object.isExpense,
+            "isIncome": object.isIncome
         ]) { err in
             if let err = err {
                 print("Error: \(err)")

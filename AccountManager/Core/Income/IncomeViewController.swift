@@ -2,12 +2,12 @@
 //  Expense.swift
 //  AccountManager
 //
-//  Created by Ytallo on 30/07/21.
+//  Created by Ytallo on 27/05/26.
 //
 
 import UIKit
 
-class ExpenseViewController: DefaultViewController {
+class IncomeViewController: DefaultViewController {
     
     @IBOutlet weak var valueTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
@@ -16,9 +16,9 @@ class ExpenseViewController: DefaultViewController {
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var paidSwitch: UISwitch!
     
-    var viewModel: ExpenseViewModel = ExpenseViewModel()
+    var viewModel: IncomeViewModel = IncomeViewModel()
     
-    var expense: AccountModel?
+    var income: AccountModel?
     
     func configLayout() {
         self.cancelButton.clipsToBounds = true
@@ -57,12 +57,12 @@ class ExpenseViewController: DefaultViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
         
-        if let tempExpense = self.expense{
+        if let tempIncome = self.income{
             
-            self.valueTextField.text = String(tempExpense.value)
-            self.dateTextField.text = dateFormatter.string(from: tempExpense.date)
-            self.descriptionTextField.text = tempExpense.description
-            self.paidSwitch.isOn = tempExpense.paid
+            self.valueTextField.text = String(tempIncome.value)
+            self.dateTextField.text = dateFormatter.string(from: tempIncome.date)
+            self.descriptionTextField.text = tempIncome.description
+            self.paidSwitch.isOn = tempIncome.paid
             
         }
     }
@@ -93,15 +93,15 @@ class ExpenseViewController: DefaultViewController {
             objDescription = self.descriptionTextField.text ?? ""
         }
         
-        if(self.expense == nil){// new expense
+        if(self.income == nil){// new expense
             
-            let expense = AccountModel(documentID: "", value: objValue, description: objDescription, date: objDate, paid: objPaid, isExpense: true, isIncome: false)
-            self.viewModel.create(object: expense)
+            let income = AccountModel(documentID: "", value: objValue, description: objDescription, date: objDate, paid: objPaid, isExpense: false, isIncome: true)
+            self.viewModel.create(object: income)
         
         }else{// update expense
             
-            let expense = AccountModel(documentID: self.expense?.documentID ?? "", value: objValue, description: objDescription, date: objDate, paid: objPaid, isExpense: true, isIncome: false)
-            self.viewModel.update(object: expense)
+            let income = AccountModel(documentID: self.income?.documentID ?? "", value: objValue, description: objDescription, date: objDate, paid: objPaid, isExpense: false, isIncome: true)
+            self.viewModel.update(object: income)
             
         }
         

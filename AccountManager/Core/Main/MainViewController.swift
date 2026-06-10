@@ -11,6 +11,7 @@ import FirebaseAuth
 class MainViewController: DefaultViewController{
     
     @IBOutlet weak var addExpenseButton: UIButton!
+    @IBOutlet weak var addIncomeButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var logoutButton: UIButton!
     
@@ -21,6 +22,11 @@ class MainViewController: DefaultViewController{
         self.addExpenseButton.layer.cornerRadius = 12.0
         self.addExpenseButton.layer.borderColor = UIColor.lightGray.cgColor
         self.addExpenseButton.layer.borderWidth = 0.5
+        
+        self.addIncomeButton.clipsToBounds = true
+        self.addIncomeButton.layer.cornerRadius = 12.0
+        self.addIncomeButton.layer.borderColor = UIColor.lightGray.cgColor
+        self.addIncomeButton.layer.borderWidth = 0.5
         
         self.logoutButton.clipsToBounds = true
         self.logoutButton.layer.cornerRadius = 12.0
@@ -42,7 +48,8 @@ class MainViewController: DefaultViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.viewModel.list()
+        self.viewModel.listExpense()
+        self.viewModel.listIncome()
         self.showActivity()
     }
     
@@ -54,6 +61,16 @@ class MainViewController: DefaultViewController{
         }
         
     }
+    
+    @IBAction func incomeAddButton(_ sender: Any) {
+        
+        let story = UIStoryboard.init(name: "Income", bundle: nil)
+        if let vc = story.instantiateInitialViewController(){
+            self.present(vc, animated: true, completion: nil)
+        }
+        
+    }
+    
     
     @IBAction func logoutButton(_ sender: Any) {
         self.viewModel.logout()
@@ -88,9 +105,21 @@ extension MainViewController:  UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "myCell") as? MyTableViewCell {
+        if let selectedData = self.viewModel.getData(from: indexPath), selectedData.isIncome,
+           let cell = tableView.dequeueReusableCell(withIdentifier: "myIncomeCell") as? MyTableIncomeViewCell{
             
-            if let myTableViewCellViewModel = self.viewModel.getTableViewCellViewModel(from: indexPath){
+            if let myTableViewCellViewModel = self.viewModel.getTableIncomeViewCellViewModel(from: indexPath){
+                cell.setupCell(viewModel: myTableViewCellViewModel)
+            }
+            
+            return cell
+            
+        }
+        
+        if let selectedData = self.viewModel.getData(from: indexPath), selectedData.isExpense,
+           let cell = tableView.dequeueReusableCell(withIdentifier: "myExpenseCell") as? MyTableExpenseViewCell{
+            
+            if let myTableViewCellViewModel = self.viewModel.getTableExpenseViewCellViewModel(from: indexPath){
                 cell.setupCell(viewModel: myTableViewCellViewModel)
             }
             
@@ -110,12 +139,24 @@ extension MainViewController:  UITableViewDelegate, UITableViewDataSource {
         
         tableView.deselectRow(at: indexPath, animated: false)
         
-        if let selectedData = self.viewModel.getData(from: indexPath){
+        if let selectedData = self.viewModel.getData(from: indexPath), selectedData.isExpense{
             
             let story = UIStoryboard.init(name: "Expense", bundle: nil)
             if let vc = story.instantiateInitialViewController() as? ExpenseViewController{
                 
                 vc.expense = selectedData
+                self.present(vc, animated: true, completion: nil)
+                
+            }
+            
+        }
+        
+        if let selectedData = self.viewModel.getData(from: indexPath), selectedData.isIncome{
+            
+            let story = UIStoryboard.init(name: "Income", bundle: nil)
+            if let vc = story.instantiateInitialViewController() as? IncomeViewController{
+                
+                vc.income = selectedData
                 self.present(vc, animated: true, completion: nil)
                 
             }
@@ -128,12 +169,26 @@ extension MainViewController:  UITableViewDelegate, UITableViewDataSource {
         
         if editingStyle == UITableViewCell.EditingStyle.delete {
             
-            if let selectedData = self.viewModel.getData(from: indexPath){
+            if let selectedData = self.viewModel.getData(from: indexPath), selectedData.isExpense{
                 
-                self.viewModel.delete(object: selectedData)
-                self.viewModel.list()
+                self.viewModel.deleteExpense(object: selectedData)
+                self.viewModel.deleteData(from: indexPath)
+                self.viewModel.listExpense()
+                
+                return
                 
             }
+            
+            if let selectedData = self.viewModel.getData(from: indexPath), selectedData.isIncome{
+                
+                self.viewModel.deleteIncome(object: selectedData)
+                self.viewModel.deleteData(from: indexPath)
+                self.viewModel.listIncome()
+                
+                return
+                
+            }
+            
         }
         
     }

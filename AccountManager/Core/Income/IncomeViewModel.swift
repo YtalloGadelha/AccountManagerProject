@@ -2,28 +2,28 @@
 //  ExpenseViewModel.swift
 //  AccountManager
 //
-//  Created by Ytallo on 01/08/21.
+//  Created by Ytallo on 27/05/26.
 //
 
 import Foundation
 
-protocol ExpenseViewModelDelegate: AnyObject {
+protocol IncomeViewModelDelegate: AnyObject {
     func didFinishWithSuccess()
     func didFinishWithError(message: String?)
 }
 
-class ExpenseViewModel {
+class IncomeViewModel {
     
-    let expenseBusinessModel: ExpenseRepositoryProtocol
-    weak var delegate: ExpenseViewModelDelegate?
+    let incomeBusinessModel: IncomeRepositoryProtocol
+    weak var delegate: IncomeViewModelDelegate?
     
-    init(expenseBusinessModel: ExpenseRepositoryProtocol = ExpenseBusinessModel()) {
-        self.expenseBusinessModel = expenseBusinessModel
+    init(incomeBusinessModel: IncomeRepositoryProtocol = IncomeBusinessModel()) {
+        self.incomeBusinessModel = incomeBusinessModel
     }
     
     func create(object: AccountModel) {
         
-        self.expenseBusinessModel.create(object: object) { [weak self] result in
+        self.incomeBusinessModel.create(object: object) { [weak self] result in
             
             switch result{
             
@@ -37,7 +37,7 @@ class ExpenseViewModel {
         
     func update(object: AccountModel) {
         
-        self.expenseBusinessModel.update(object: object) { [weak self] result in
+        self.incomeBusinessModel.update(object: object) { [weak self] result in
             
             switch result{
             
